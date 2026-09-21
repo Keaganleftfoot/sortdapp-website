@@ -124,27 +124,12 @@
     /* Footer */
     .footer-inner { justify-content: center; gap: 32px; }
   }
-  .hero-eyebrow {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 1rem;
-    font-weight: 600;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
+  .hero-recruiting {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 0.95rem;
+    letter-spacing: 0.01em;
     color: var(--text2);
-    margin-bottom: 24px;
-  }
-  .eyebrow-dot {
-    width: 6px; height: 6px;
-    border-radius: 50%;
-    background: #22C55E;
-    flex-shrink: 0;
-    animation: pulse 2s ease-in-out infinite;
-  }
-  @keyframes pulse {
-    0%, 100% { opacity: 1; transform: scale(1); }
-    50% { opacity: 0.5; transform: scale(0.8); }
   }
   .hero-headline {
     font-family: 'Syne', sans-serif;
@@ -795,15 +780,16 @@
 
 <!-- HERO -->
 <section class="hero">
-  <div class="hero-eyebrow">
-    <span class="eyebrow-dot"></span>
-    Now recruiting contractors · Cape Town
-  </div>
   <h1 class="hero-headline">Get it<br>done.</h1>
   <p class="hero-sub">Sortd connects Cape Town homeowners with trusted local contractors: cleaners, handymen, and everyday errand runners. Launching November 2026.</p>
   <div class="hero-actions">
-    <a href="#join" class="btn-primary">Join as a Contractor →</a>
-    <a href="#how" class="btn-ghost">How it works</a>
+    <div style="display:flex;flex-direction:column;align-items:inherit;gap:10px">
+      <span class="hero-recruiting">Recruiting for Cape Town</span>
+      <div style="display:flex;gap:12px;flex-wrap:wrap">
+        <a href="#join" class="btn-primary">Join as a Contractor →</a>
+        <a href="#how" class="btn-ghost">How it works</a>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -841,7 +827,7 @@
         <span class="panel-badge badge-live">● Registrations open</span>
         <div>
           <div class="panel-title">I want to<br>find work</div>
-          <p class="panel-desc" style="margin-top:10px">Register now and be first in line when we launch. Build your profile, pick your skills, and start earning.</p>
+          <p class="panel-desc" style="margin-top:10px">Register your interest now. Once we launch, we'll review your profile and verify you before going live — so homeowners know they're getting someone they can trust.</p>
         </div>
 
         <div class="form-section" id="contractor-form">
@@ -864,7 +850,7 @@
             </div>
           </div>
           <button class="btn-submit" id="submit-btn" onclick="submitForm()">Register as Contractor →</button>
-          <p style="font-size:0.75rem;color:var(--text3);text-align:center">Free to join. No commission. No catches.</p>
+          <p style="font-size:0.75rem;color:var(--text3);text-align:center">Free to join. Zero commission. All contractors are reviewed before going live.</p>
         </div>
 
         <div class="form-success" id="form-success">
