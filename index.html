@@ -128,11 +128,11 @@
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    font-size: 0.8rem;
+    font-size: 1rem;
     font-weight: 600;
-    letter-spacing: 0.08em;
+    letter-spacing: 0.04em;
     text-transform: uppercase;
-    color: var(--text3);
+    color: var(--text2);
     margin-bottom: 24px;
   }
   .eyebrow-dot {
@@ -216,18 +216,17 @@
   }
   .stat-item:last-child { border-right: none; }
   .stat-value {
-    font-family: 'Syne', sans-serif;
-    font-weight: 800;
-    font-size: 1.8rem;
-    letter-spacing: -0.03em;
-    color: var(--text);
-    font-variant-numeric: tabular-nums;
-  }
-  .stat-label {
     font-size: 0.8rem;
     color: var(--text3);
-    margin-top: 2px;
+    margin-top: 3px;
     font-weight: 500;
+  }
+  .stat-label {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1.4rem;
+    letter-spacing: -0.02em;
+    color: var(--text);
   }
 
   /* ── Two-panel CTA ── */
@@ -765,7 +764,7 @@
     .stat-item:nth-child(odd) { border-right: 1px solid var(--border); }
     .stat-item:nth-child(3),
     .stat-item:nth-child(4) { border-bottom: none; }
-    .stat-value { font-size: 1.5rem; }
+    .stat-label { font-size: 1.1rem; }
 
     /* Nav: shrink button so it fits */
     .nav-cta { font-size: 0.78rem; padding: 7px 12px; }
@@ -813,20 +812,20 @@
   <div class="container">
     <div class="stats-inner">
       <div class="stat-item">
-        <div class="stat-value">Nov '26</div>
         <div class="stat-label">Launch date</div>
+        <div class="stat-value">November 2026</div>
       </div>
       <div class="stat-item">
-        <div class="stat-value">R0</div>
-        <div class="stat-label">Commission taken</div>
+        <div class="stat-label">Zero commission</div>
+        <div class="stat-value">Keep everything you earn</div>
       </div>
       <div class="stat-item">
-        <div class="stat-value">CPT</div>
-        <div class="stat-label">Starting in Cape Town</div>
+        <div class="stat-label">Starting in</div>
+        <div class="stat-value">Cape Town</div>
       </div>
       <div class="stat-item">
-        <div class="stat-value">Free</div>
-        <div class="stat-label">To join & get started</div>
+        <div class="stat-label">Free to join</div>
+        <div class="stat-value">No upfront cost</div>
       </div>
     </div>
   </div>
