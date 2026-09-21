@@ -2,10 +2,9 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap">
 
 <style>
-  /* Force light mode always */
-  :root { color-scheme: light only; }
-  /* ── Tokens ── */
+  /* Always light — no dark mode */
   :root {
+    color-scheme: light;
     --bg:        #F7F7F5;
     --bg2:       #EFEFEC;
     --bg3:       #E4E4E0;
@@ -25,45 +24,9 @@
     --tag-text:  #444440;
     --hero-size: clamp(3.5rem, 10vw, 8rem);
   }
-  @media (prefers-color-scheme: dark) {
-    :root:not([data-theme="light"]) {
-      --bg:        #0A0A0A;
-      --bg2:       #141414;
-      --bg3:       #1C1C1C;
-      --surface:   #141414;
-      --border:    #2A2A2A;
-      --text:      #FAFAFA;
-      --text2:     #A0A0A0;
-      --text3:     #606060;
-      --accent:    #FFFFFF;
-      --btn-bg:    #FFFFFF;
-      --btn-text:  #0A0A0A;
-      --coming-bg: #111111;
-      --coming-border: #2A2A2A;
-      --success-bg: #0D2818;
-      --success-text: #22C55E;
-      --tag-bg:    #1C1C1C;
-      --tag-text:  #A0A0A0;
-    }
-  }
-  :root[data-theme="dark"] {
-    --bg:        #0A0A0A;
-    --bg2:       #141414;
-    --bg3:       #1C1C1C;
-    --surface:   #141414;
-    --border:    #2A2A2A;
-    --text:      #FAFAFA;
-    --text2:     #A0A0A0;
-    --text3:     #606060;
-    --accent:    #FFFFFF;
-    --btn-bg:    #FFFFFF;
-    --btn-text:  #0A0A0A;
-    --coming-bg: #111111;
-    --coming-border: #2A2A2A;
-    --success-bg: #0D2818;
-    --success-text: #22C55E;
-    --tag-bg:    #1C1C1C;
-    --tag-text:  #A0A0A0;
+  html, body {
+    background: #F7F7F5 !important;
+    color: #0A0A0A !important;
   }
 
   /* ── Reset ── */
@@ -284,16 +247,7 @@
     background: var(--tag-bg);
     color: var(--tag-text);
   }
-  @media (prefers-color-scheme: dark) {
-    :root:not([data-theme="light"]) .badge-live {
-      background: #0D2818;
-      color: #22C55E;
-    }
-  }
-  :root[data-theme="dark"] .badge-live {
-    background: #0D2818;
-    color: #22C55E;
-  }
+  /* light-only — no dark badge override needed */
   .panel-title {
     font-family: 'Syne', sans-serif;
     font-weight: 800;
