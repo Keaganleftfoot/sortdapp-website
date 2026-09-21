@@ -1,6 +1,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Sortd</title>
+<title>Sortd — Get it done.</title>
+<meta name="description" content="Find trusted local contractors in Cape Town. Post tasks, get quotes, pay direct. Launching November 2026.">
+<meta name="theme-color" content="#0A0A0A">
+<link rel="icon" type="image/svg+xml" href="/icon-192.svg">
+<link rel="apple-touch-icon" href="/icon-192.svg">
+<link rel="manifest" href="/manifest.json">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap">
 
 <style>
@@ -1195,6 +1200,11 @@
   function showSuccess() {
     document.getElementById('contractor-form').style.display = 'none';
     document.getElementById('form-success').classList.add('visible');
+  }
+
+  // ── PWA service worker ──
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/sw.js').catch(() => {});
   }
 
   // ── Notify me (consumer) ──
