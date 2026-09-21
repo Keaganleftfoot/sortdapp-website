@@ -1,0 +1,805 @@
+<title>Sortd</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap">
+
+<style>
+  /* ── Tokens ── */
+  :root {
+    --bg:        #F7F7F5;
+    --bg2:       #EFEFEC;
+    --bg3:       #E4E4E0;
+    --surface:   #FFFFFF;
+    --border:    #DDDDD8;
+    --text:      #0A0A0A;
+    --text2:     #555550;
+    --text3:     #99998F;
+    --accent:    #0A0A0A;
+    --btn-bg:    #0A0A0A;
+    --btn-text:  #FFFFFF;
+    --coming-bg: #F0F0EC;
+    --coming-border: #DDDDD8;
+    --success-bg: #F0FBF4;
+    --success-text: #16A34A;
+    --tag-bg:    #EEEEE9;
+    --tag-text:  #444440;
+    --hero-size: clamp(3.5rem, 10vw, 8rem);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg:        #0A0A0A;
+      --bg2:       #141414;
+      --bg3:       #1C1C1C;
+      --surface:   #141414;
+      --border:    #2A2A2A;
+      --text:      #FAFAFA;
+      --text2:     #A0A0A0;
+      --text3:     #606060;
+      --accent:    #FFFFFF;
+      --btn-bg:    #FFFFFF;
+      --btn-text:  #0A0A0A;
+      --coming-bg: #111111;
+      --coming-border: #2A2A2A;
+      --success-bg: #0D2818;
+      --success-text: #22C55E;
+      --tag-bg:    #1C1C1C;
+      --tag-text:  #A0A0A0;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg:        #0A0A0A;
+    --bg2:       #141414;
+    --bg3:       #1C1C1C;
+    --surface:   #141414;
+    --border:    #2A2A2A;
+    --text:      #FAFAFA;
+    --text2:     #A0A0A0;
+    --text3:     #606060;
+    --accent:    #FFFFFF;
+    --btn-bg:    #FFFFFF;
+    --btn-text:  #0A0A0A;
+    --coming-bg: #111111;
+    --coming-border: #2A2A2A;
+    --success-bg: #0D2818;
+    --success-text: #22C55E;
+    --tag-bg:    #1C1C1C;
+    --tag-text:  #A0A0A0;
+  }
+
+  /* ── Reset ── */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 16px;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    padding-inline: 0;
+  }
+  img { max-width: 100%; display: block; }
+  a { color: inherit; text-decoration: none; }
+  button { cursor: pointer; border: none; font-family: inherit; }
+
+  /* ── Layout wrappers ── */
+  .container {
+    max-width: 1100px;
+    margin-inline: auto;
+    padding-inline: 24px;
+  }
+
+  /* ── Nav ── */
+  nav {
+    position: sticky;
+    top: env(safe-area-inset-top, 0px);
+    z-index: 100;
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+    padding: 0 24px;
+  }
+  .nav-inner {
+    max-width: 1100px;
+    margin-inline: auto;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .nav-logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1.3rem;
+    letter-spacing: -0.02em;
+    color: var(--text);
+  }
+  .nav-cta {
+    background: var(--btn-bg);
+    color: var(--btn-text);
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 0.85rem;
+    padding: 8px 18px;
+    border-radius: 6px;
+    transition: opacity 0.15s;
+  }
+  .nav-cta:hover { opacity: 0.8; }
+
+  /* ── Hero ── */
+  .hero {
+    padding-block: 80px 60px;
+    padding-inline: 24px;
+    max-width: 1100px;
+    margin-inline: auto;
+  }
+  .hero-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text3);
+    margin-bottom: 24px;
+  }
+  .eyebrow-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: #22C55E;
+    flex-shrink: 0;
+    animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.8); }
+  }
+  .hero-headline {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: var(--hero-size);
+    line-height: 0.95;
+    letter-spacing: -0.03em;
+    color: var(--text);
+    text-wrap: balance;
+    margin-bottom: 28px;
+  }
+  .hero-sub {
+    font-size: 1.15rem;
+    color: var(--text2);
+    max-width: 520px;
+    line-height: 1.65;
+    margin-bottom: 40px;
+  }
+  .hero-actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .btn-primary {
+    background: var(--btn-bg);
+    color: var(--btn-text);
+    font-weight: 600;
+    font-size: 0.95rem;
+    padding: 13px 26px;
+    border-radius: 8px;
+    transition: opacity 0.15s;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .btn-primary:hover { opacity: 0.8; }
+  .btn-ghost {
+    background: transparent;
+    color: var(--text);
+    font-weight: 500;
+    font-size: 0.95rem;
+    padding: 13px 26px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    transition: background 0.15s;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .btn-ghost:hover { background: var(--bg2); }
+
+  /* ── Stats strip ── */
+  .stats {
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding-block: 28px;
+    background: var(--bg2);
+  }
+  .stats-inner {
+    display: flex;
+    gap: 0;
+    flex-wrap: wrap;
+  }
+  .stat-item {
+    flex: 1;
+    min-width: 140px;
+    padding: 8px 24px;
+    border-right: 1px solid var(--border);
+  }
+  .stat-item:last-child { border-right: none; }
+  .stat-value {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1.8rem;
+    letter-spacing: -0.03em;
+    color: var(--text);
+    font-variant-numeric: tabular-nums;
+  }
+  .stat-label {
+    font-size: 0.8rem;
+    color: var(--text3);
+    margin-top: 2px;
+    font-weight: 500;
+  }
+
+  /* ── Two-panel CTA ── */
+  .panels {
+    padding-block: 70px;
+  }
+  .panels-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+  @media (max-width: 700px) {
+    .panels-grid { grid-template-columns: 1fr; }
+  }
+  .panel {
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 36px;
+    background: var(--surface);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .panel-active { background: var(--surface); }
+  .panel-coming {
+    background: var(--coming-bg);
+    border-color: var(--coming-border);
+    opacity: 0.75;
+  }
+  .panel-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 20px;
+    align-self: flex-start;
+  }
+  .badge-live {
+    background: #DCFCE7;
+    color: #15803D;
+  }
+  .badge-soon {
+    background: var(--tag-bg);
+    color: var(--tag-text);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) .badge-live {
+      background: #0D2818;
+      color: #22C55E;
+    }
+  }
+  :root[data-theme="dark"] .badge-live {
+    background: #0D2818;
+    color: #22C55E;
+  }
+  .panel-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1.6rem;
+    letter-spacing: -0.02em;
+    color: var(--text);
+    line-height: 1.1;
+  }
+  .panel-desc {
+    font-size: 0.95rem;
+    color: var(--text2);
+    line-height: 1.6;
+  }
+  .panel-coming .panel-title,
+  .panel-coming .panel-desc { color: var(--text3); }
+
+  /* ── Contractor form ── */
+  .form-section { display: flex; flex-direction: column; gap: 14px; }
+  .form-row { display: flex; flex-direction: column; gap: 6px; }
+  .form-row label {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--text2);
+    letter-spacing: 0.02em;
+  }
+  .form-row input,
+  .form-row select {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 11px 14px;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.95rem;
+    color: var(--text);
+    outline: none;
+    transition: border-color 0.15s;
+    width: 100%;
+  }
+  .form-row input:focus,
+  .form-row select:focus { border-color: var(--accent); }
+  .form-row select option { background: var(--bg); color: var(--text); }
+  .skill-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .skill-chip {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: var(--text2);
+    cursor: pointer;
+    transition: all 0.12s;
+    background: var(--bg);
+    user-select: none;
+  }
+  .skill-chip input[type="checkbox"] { display: none; }
+  .skill-chip.selected {
+    background: var(--btn-bg);
+    color: var(--btn-text);
+    border-color: var(--btn-bg);
+  }
+  .btn-submit {
+    background: var(--btn-bg);
+    color: var(--btn-text);
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    padding: 14px 24px;
+    border-radius: 8px;
+    width: 100%;
+    transition: opacity 0.15s;
+    margin-top: 4px;
+  }
+  .btn-submit:hover { opacity: 0.85; }
+  .btn-submit:disabled { opacity: 0.5; cursor: not-allowed; }
+  .form-success {
+    display: none;
+    background: var(--success-bg);
+    border: 1px solid #BBF7D0;
+    border-radius: 12px;
+    padding: 24px;
+    text-align: center;
+    gap: 10px;
+    flex-direction: column;
+    align-items: center;
+  }
+  .form-success.visible { display: flex; }
+  .success-icon { font-size: 2rem; }
+  .success-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: var(--success-text);
+  }
+  .success-body { font-size: 0.9rem; color: var(--text2); }
+
+  /* Coming soon panel content */
+  .coming-date {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 2.2rem;
+    letter-spacing: -0.03em;
+    color: var(--text3);
+  }
+  .notify-form { display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap; }
+  .notify-input {
+    flex: 1;
+    min-width: 180px;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 11px 14px;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.9rem;
+    color: var(--text);
+    outline: none;
+    transition: border-color 0.15s;
+  }
+  .notify-input:focus { border-color: var(--accent); }
+  .notify-btn {
+    background: var(--bg3);
+    color: var(--text2);
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 0.88rem;
+    padding: 11px 18px;
+    border-radius: 8px;
+    transition: opacity 0.15s;
+    white-space: nowrap;
+  }
+  .notify-btn:hover { opacity: 0.8; }
+  .notify-note { font-size: 0.78rem; color: var(--text3); margin-top: 4px; }
+
+  /* ── Categories ── */
+  .categories { padding-block: 60px; background: var(--bg2); }
+  .section-eyebrow {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text3);
+    margin-bottom: 12px;
+  }
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    letter-spacing: -0.025em;
+    color: var(--text);
+    text-wrap: balance;
+    margin-bottom: 36px;
+    line-height: 1.1;
+  }
+  .cat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 12px;
+  }
+  .cat-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    transition: transform 0.12s, border-color 0.12s;
+  }
+  .cat-card:hover { transform: translateY(-2px); border-color: var(--text3); }
+  .cat-icon { font-size: 1.6rem; }
+  .cat-name {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text);
+    line-height: 1.3;
+  }
+
+  /* ── How it works ── */
+  .how { padding-block: 70px; }
+  .steps { display: flex; flex-direction: column; gap: 0; margin-top: 12px; }
+  .step {
+    display: flex;
+    gap: 24px;
+    padding-block: 28px;
+    border-bottom: 1px solid var(--border);
+    align-items: flex-start;
+  }
+  .step:last-child { border-bottom: none; }
+  .step-num {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1rem;
+    color: var(--text3);
+    min-width: 36px;
+    padding-top: 2px;
+    font-variant-numeric: tabular-nums;
+  }
+  .step-body { flex: 1; }
+  .step-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: var(--text);
+    margin-bottom: 6px;
+  }
+  .step-desc { font-size: 0.92rem; color: var(--text2); line-height: 1.6; }
+
+  /* ── Footer ── */
+  footer {
+    border-top: 1px solid var(--border);
+    padding-block: 36px;
+    background: var(--bg);
+  }
+  .footer-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  .footer-logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1.1rem;
+    letter-spacing: -0.02em;
+    color: var(--text);
+  }
+  .footer-copy {
+    font-size: 0.82rem;
+    color: var(--text3);
+  }
+  .footer-links {
+    display: flex;
+    gap: 20px;
+  }
+  .footer-links a {
+    font-size: 0.82rem;
+    color: var(--text3);
+    transition: color 0.12s;
+  }
+  .footer-links a:hover { color: var(--text); }
+
+  /* ── Responsive ── */
+  @media (max-width: 600px) {
+    .stat-item { padding: 8px 16px; min-width: 100px; }
+    .stat-value { font-size: 1.5rem; }
+    .panel { padding: 24px; }
+    .skill-grid { grid-template-columns: 1fr 1fr; }
+    .footer-inner { flex-direction: column; align-items: flex-start; }
+    .hero { padding-block: 52px 40px; }
+  }
+</style>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <span class="nav-logo">Sortd</span>
+    <a href="#join" class="nav-cta">Join as Contractor</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-eyebrow">
+    <span class="eyebrow-dot"></span>
+    Now recruiting contractors · Cape Town
+  </div>
+  <h1 class="hero-headline">Get it<br>done.</h1>
+  <p class="hero-sub">Sortd connects Cape Town homeowners with trusted local contractors — cleaners, handymen, and everyday errand runners. Launching November 2026.</p>
+  <div class="hero-actions">
+    <a href="#join" class="btn-primary">Join as a Contractor →</a>
+    <a href="#how" class="btn-ghost">How it works</a>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats">
+  <div class="container">
+    <div class="stats-inner">
+      <div class="stat-item">
+        <div class="stat-value">Nov '26</div>
+        <div class="stat-label">Launch date</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value">R0</div>
+        <div class="stat-label">Commission taken</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value">CPT</div>
+        <div class="stat-label">Starting in Cape Town</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value">Free</div>
+        <div class="stat-label">To join & get started</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TWO-PANEL -->
+<section class="panels" id="join">
+  <div class="container">
+    <div class="panels-grid">
+
+      <!-- Contractor panel (LIVE) -->
+      <div class="panel panel-active">
+        <span class="panel-badge badge-live">● Registrations open</span>
+        <div>
+          <div class="panel-title">I want to<br>find work</div>
+          <p class="panel-desc" style="margin-top:10px">Register now and be first in line when we launch. Build your profile, pick your skills, and start earning.</p>
+        </div>
+
+        <div class="form-section" id="contractor-form">
+          <div class="form-row">
+            <label for="f-name">Full name</label>
+            <input type="text" id="f-name" placeholder="Thabo Nkosi" autocomplete="name" required>
+          </div>
+          <div class="form-row">
+            <label for="f-phone">Phone number</label>
+            <input type="tel" id="f-phone" placeholder="072 000 0000" autocomplete="tel" required>
+          </div>
+          <div class="form-row">
+            <label for="f-suburb">Your suburb</label>
+            <input type="text" id="f-suburb" placeholder="Bellville, Claremont, Mitchells Plain…" required>
+          </div>
+          <div class="form-row">
+            <label>Skills (select all that apply)</label>
+            <div class="skill-grid" id="skill-grid">
+              <!-- filled by JS -->
+            </div>
+          </div>
+          <button class="btn-submit" id="submit-btn" onclick="submitForm()">Register as Contractor →</button>
+          <p style="font-size:0.75rem;color:var(--text3);text-align:center">Free to join. No commission. No catches.</p>
+        </div>
+
+        <div class="form-success" id="form-success">
+          <div class="success-icon">🎉</div>
+          <div class="success-title">You're on the list!</div>
+          <p class="success-body">We'll send you a WhatsApp or SMS when Sortd goes live in November. Get ready to start earning.</p>
+        </div>
+      </div>
+
+      <!-- Consumer panel (COMING SOON) -->
+      <div class="panel panel-coming">
+        <span class="panel-badge badge-soon">Coming soon</span>
+        <div>
+          <div class="panel-title" style="color:var(--text3)">I need work<br>done</div>
+          <p class="panel-desc">Post jobs, get quotes from verified local contractors, and pay them directly. No middleman fees.</p>
+        </div>
+        <div class="coming-date">1 Nov<br>2026</div>
+        <div>
+          <p style="font-size:0.85rem;color:var(--text3);margin-bottom:12px">Get notified when we launch for homeowners:</p>
+          <div class="notify-form">
+            <input type="email" class="notify-input" id="notify-email" placeholder="your@email.com">
+            <button class="notify-btn" onclick="notifyMe()">Notify me</button>
+          </div>
+          <p class="notify-note" id="notify-msg"></p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- CATEGORIES -->
+<section class="categories">
+  <div class="container">
+    <p class="section-eyebrow">What we cover</p>
+    <h2 class="section-title">Every job,<br>one app.</h2>
+    <div class="cat-grid">
+      <div class="cat-card"><div class="cat-icon">🧹</div><div class="cat-name">Cleaning</div></div>
+      <div class="cat-card"><div class="cat-icon">🔧</div><div class="cat-name">Handyman</div></div>
+      <div class="cat-card"><div class="cat-icon">🛒</div><div class="cat-name">Errands</div></div>
+      <div class="cat-card"><div class="cat-icon">🌿</div><div class="cat-name">Gardening</div></div>
+      <div class="cat-card"><div class="cat-icon">🚿</div><div class="cat-name">Plumbing</div></div>
+      <div class="cat-card"><div class="cat-icon">⚡</div><div class="cat-name">Electrical</div></div>
+      <div class="cat-card"><div class="cat-icon">🎨</div><div class="cat-name">Painting</div></div>
+      <div class="cat-card"><div class="cat-icon">📦</div><div class="cat-name">Moving</div></div>
+      <div class="cat-card"><div class="cat-icon">🐾</div><div class="cat-name">Pet Care</div></div>
+      <div class="cat-card"><div class="cat-icon">📚</div><div class="cat-name">Tutoring</div></div>
+      <div class="cat-card"><div class="cat-icon">🚗</div><div class="cat-name">Car Wash</div></div>
+      <div class="cat-card"><div class="cat-icon">🍳</div><div class="cat-name">Cooking</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how" id="how">
+  <div class="container">
+    <p class="section-eyebrow">For contractors</p>
+    <h2 class="section-title">Start earning<br>in 3 steps.</h2>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">01</div>
+        <div class="step-body">
+          <div class="step-title">Register your profile</div>
+          <div class="step-desc">Fill in your name, skills, and the suburbs you serve. Free to join — no upfront cost, no commission on what you earn.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">02</div>
+        <div class="step-body">
+          <div class="step-title">Browse jobs near you</div>
+          <div class="step-desc">See new jobs posted in your area. Submit an offer with your price and pitch. Pro members get a 30-minute head start on every new job.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">03</div>
+        <div class="step-body">
+          <div class="step-title">Get hired. Get paid.</div>
+          <div class="step-desc">Chat directly with the homeowner, agree on the details, and get paid cash or EFT when the job is done. Simple.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <span class="footer-logo">Sortd</span>
+      <div class="footer-links">
+        <a href="#">Terms</a>
+        <a href="#">Privacy</a>
+        <a href="mailto:hello@sortdapp.co.za">Contact</a>
+      </div>
+      <span class="footer-copy">© 2026 Sortd. Cape Town, South Africa.</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // ── Skill chips ──
+  const SKILLS = [
+    'Cleaning','Handyman','Errands','Gardening',
+    'Plumbing','Electrical','Painting','Moving',
+    'Pet Care','Tutoring','Car Wash','Cooking'
+  ];
+  const grid = document.getElementById('skill-grid');
+  SKILLS.forEach(s => {
+    const label = document.createElement('label');
+    label.className = 'skill-chip';
+    label.innerHTML = `<input type="checkbox" value="${s}"><span>${s}</span>`;
+    label.querySelector('input').addEventListener('change', () => {
+      label.classList.toggle('selected', label.querySelector('input').checked);
+    });
+    grid.appendChild(label);
+  });
+
+  // ── Contractor form submit ──
+  // ⚠️  REPLACE 'YOUR_FORM_ID' below with your Formspree form ID.
+  // Create a free account at formspree.io → New Form → copy the ID.
+  const SHEET_ENDPOINT = 'https://script.google.com/macros/s/AKfycbxxHa9NMB_S-P-mixXGBJzW_ye99elKQ4n5uohjMX0wGPvhpLcsssodoS7nFivC38FK/exec';
+
+  async function submitForm() {
+    const name   = document.getElementById('f-name').value.trim();
+    const phone  = document.getElementById('f-phone').value.trim();
+    const suburb = document.getElementById('f-suburb').value.trim();
+    const skills = [...document.querySelectorAll('#skill-grid input:checked')].map(i => i.value);
+
+    if (!name || !phone || !suburb) {
+      alert('Please fill in your name, phone number, and suburb.');
+      return;
+    }
+
+    const btn = document.getElementById('submit-btn');
+    btn.disabled = true;
+    btn.textContent = 'Sending…';
+
+    try {
+      await fetch(SHEET_ENDPOINT, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, phone, suburb, skills: skills.join(', '), source: 'Website' })
+      });
+      showSuccess();
+    } catch {
+      btn.disabled = false;
+      btn.textContent = 'Register as Contractor →';
+      alert('Something went wrong. Please try again.');
+    }
+  }
+
+  function showSuccess() {
+    document.getElementById('contractor-form').style.display = 'none';
+    document.getElementById('form-success').classList.add('visible');
+  }
+
+  // ── Notify me (consumer) ──
+  function notifyMe() {
+    const email = document.getElementById('notify-email').value.trim();
+    const msg = document.getElementById('notify-msg');
+    if (!email || !email.includes('@')) {
+      msg.style.color = '#EF4444';
+      msg.textContent = 'Please enter a valid email address.';
+      return;
+    }
+    msg.style.color = 'var(--success-text)';
+    msg.textContent = "✓ You're on the list. We'll let you know when Sortd launches.";
+    document.getElementById('notify-email').disabled = true;
+    document.querySelector('.notify-btn').disabled = true;
+  }
+</script>
