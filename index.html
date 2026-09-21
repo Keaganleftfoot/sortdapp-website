@@ -208,11 +208,9 @@
   }
   .panels-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr;
     gap: 20px;
-  }
-  @media (max-width: 700px) {
-    .panels-grid { grid-template-columns: 1fr; }
+    max-width: 600px;
   }
   .panel {
     border: 1px solid var(--border);
@@ -523,8 +521,6 @@
     /* Hero */
     .hero { padding-block: 52px 36px; }
 
-    /* Panels stack */
-    .panels-grid { grid-template-columns: 1fr; }
     .panel { padding: 24px; }
 
     /* Categories: 2 columns */
