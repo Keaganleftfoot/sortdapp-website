@@ -1208,8 +1208,6 @@
   });
 
   // ── Contractor form submit ──
-  // ⚠️  REPLACE 'YOUR_FORM_ID' below with your Formspree form ID.
-  // Create a free account at formspree.io → New Form → copy the ID.
   const SHEET_ENDPOINT = 'https://script.google.com/macros/s/AKfycbxxHa9NMB_S-P-mixXGBJzW_ye99elKQ4n5uohjMX0wGPvhpLcsssodoS7nFivC38FK/exec';
 
   async function submitForm() {
@@ -1227,19 +1225,15 @@
     btn.disabled = true;
     btn.textContent = 'Sending…';
 
-    try {
-      await fetch(SHEET_ENDPOINT, {
-        method: 'POST',
-        mode: 'no-cors',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, phone, suburb, skills: skills.join(', '), source: 'Website' })
-      });
-      showSuccess();
-    } catch {
-      btn.disabled = false;
-      btn.textContent = 'Register as a Tasker →';
-      alert('Something went wrong. Please try again.');
-    }
+    // Apps Script takes ~30s to respond and no-cors hides the result anyway, so don't wait on it.
+    fetch(SHEET_ENDPOINT, {
+      method: 'POST',
+      mode: 'no-cors',
+      keepalive: true,
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, phone, suburb, skills: skills.join(', '), source: 'Website' })
+    }).catch(() => {});
+    showSuccess();
   }
 
   function showSuccess() {
